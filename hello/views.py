@@ -3,7 +3,7 @@ import json
 import re
 import urllib
 from datetime import datetime
-
+import dateutil.parser
 
 import requests
 from django.shortcuts import render
@@ -55,24 +55,11 @@ def getGeoData(city):
 def mappingApi1(API, city, weather_data):
     payload = {'lat': city.cLatitude, 'lon': city.cLongitude, 'appid': API.cKey, 'units': 'metric', 'exclude': 'hourly'}
     city_weather = requests.get(API.cAdress, payload).json()
-    a = weatherDayForecast(
-        dForecasteDate=datetime.now(),
-        dCallDate=datetime.now(),
-        mTemp=weatherDetail(iMax=city_weather['current']['temp'], iMin=city_weather['current']['temp'],
-                            iAvg=city_weather['current']['temp']),
-        mRain=weatherDetail(iMax=city_weather['current']['humidity'], iMin=city_weather['current']['pressure'],
-                            iAvg=city_weather['current']['pressure']),
-        mWind=weatherDetail(iMax=city_weather['current']['humidity'], iMin=city_weather['current']['pressure'],
-                            iAvg=city_weather['current']['pressure']),
-        cName=city_weather['current']['weather'][0]['description'],
-        cIcon='http://openweathermap.org/img/w/'+ city_weather['current']['weather'][0]['icon']+'.png',
-        mAPI=API
-    )
-    weather_data.append(a)
     forcast = city_weather['daily']
     for day in forcast:
+        yourdate = datetime.utcfromtimestamp(day['dt'])
         b = weatherDayForecast(
-            dForecasteDate= day['dt'],
+            dForecasteDate=yourdate.strftime("%d %B, %Y"),
             dCallDate=datetime.now(),
             mTemp=weatherDetail(iMax=day['temp']['max'], iMin=day['temp']['min'], iAvg=day['temp']['day']),
             mRain=weatherDetail(iMax=day['humidity'], iMin=day['pressure'], iAvg=day['clouds']),
@@ -88,8 +75,9 @@ def mappingApi2(API, city, weather_data):
     city_weather = requests.get(API.cAdress, payload).json()
     forcast = city_weather['dailyForecasts']['forecastLocation']['forecast']
     for day in forcast:
+        yourdate = dateutil.parser.parse(day['utcTime'])
         b = weatherDayForecast(
-            dForecasteDate=day['utcTime'],
+            dForecasteDate=yourdate.strftime("%d %B, %Y"),
             dCallDate=datetime.now(),
             mTemp=weatherDetail(iMax=day['highTemperature'], iMin=day['lowTemperature'], iAvg=day['comfort']),
             mRain=weatherDetail(iMax=day['humidity'], iMin=day['precipitationProbability'], iAvg=day['rainFall']),
@@ -110,8 +98,9 @@ def mappingApi3(API, city, weather_data):
     #city_weather = response.json()
     forcast = test['response'][0]['periods']
     for day in forcast:
+        yourdate = dateutil.parser.parse(day['dateTimeISO'])
         b = weatherDayForecast(
-            dForecasteDate=day['dateTimeISO'],
+            dForecasteDate=yourdate.strftime("%d %B, %Y"),
             dCallDate=datetime.now(),
             mTemp=weatherDetail(iMax=day['maxTempC'], iMin=day['minTempC'], iAvg=day['avgTempC']),
             mRain=weatherDetail(iMax=day['maxHumidity'], iMin=day['minHumidity'], iAvg=day['precipMM']),
