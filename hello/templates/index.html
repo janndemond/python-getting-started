@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>What's the weather like?</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
     <section class="hero is-primary">
@@ -14,6 +15,14 @@
                 <h1 class="title">
                     What's the weather like?
                 </h1>
+            </div>
+            <div class="navbar-nav">
+                {% if user.is_authendicated %}
+                    <a class="nav-item nav-link" href="{%   url 'logout' %}">Logout</a>
+                {% else %}
+                <a class="nav-item nav-link" href="{%   url 'login' %}">Login</a>
+                <a class="nav-item nav-link" href="{%   url 'register' %}">Register</a>
+                {%endif  %}
             </div>
         </div>
     </section>
