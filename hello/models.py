@@ -5,7 +5,7 @@ class City(models.Model):
     name = models.CharField(max_length=25)
     cLatitude = models.CharField(max_length=25, blank=True, default='')
     cLongitude = models.CharField(max_length=25,blank=True, default='')
-    iPostCode = models.PositiveIntegerField(blank=True, default='')
+
     cCountry= models.CharField(max_length=25,blank=True, default='')
     def __str__(self): #show the actual city name on the dashboard
         return self.name

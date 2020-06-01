@@ -43,6 +43,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "hello",
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
 ]
 
 MIDDLEWARE = [
@@ -122,5 +127,11 @@ STATIC_URL = "/static/"
 CRISPY_TAMPLATE_PACK="bootstrap4"
 LOGIN_REDIRECT_URL="index"
 LOGIN_URL='login'
-
+SITE_ID=1
 django_heroku.settings(locals())
+
+AUTHENTICATION_BACKENDS = (
+    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
