@@ -65,7 +65,7 @@ def mappingApi1(API, city, weather_data):
             mRain=weatherDetail(iMax=day['humidity'], iMin=day['pressure'], iAvg=day['clouds']),
             mWind=weatherDetail(iMax=day['wind_speed'], iMin=day['wind_speed'], iAvg=day['wind_speed']),
             cName=day['weather'][0]['description'],
-            cIcon='http://openweathermap.org/img/w/'+ day['weather'][0]['icon']+'.png',
+            cIcon='https://openweathermap.org/img/w/'+ day['weather'][0]['icon']+'.png',
             mAPI=API
         )
         # b.save()
