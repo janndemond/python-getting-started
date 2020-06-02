@@ -18,6 +18,9 @@
   color: #fff;
   box-shadow: 3px 3px 4px rgba(0,0,0,0.2);
 }
+.login-dark2 form {
+  max-width: 500px;
+}
 
 .login-dark .illustration {
   text-align: center;
@@ -70,3 +73,39 @@
   transform: translateY(1px);
 }
 
+.login-dark .controls .textinput {
+  background: none;
+  border: none;
+  border-bottom: 1px solid #434a52;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  color: inherit;
+}
+.login-dark .controls  .emailinput{
+  background: none;
+  border: none;
+  border-bottom: 1px solid #434a52;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  color: inherit;
+}
+#id_username{
+  background: none;
+  border: none;
+  border-bottom: 1px solid #434a52;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  color: inherit;
+}
+#id_password{
+  background: none;
+  border: none;
+  border-bottom: 1px solid #434a52;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+  color: inherit;
+}

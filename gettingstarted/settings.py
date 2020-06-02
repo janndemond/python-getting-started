@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "sslserver",
     "django.contrib.admin",
     "users.apps.UsersConfig",
     "crispy_forms",
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "hello",
+    "cookie_consent",
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -138,3 +140,9 @@ AUTHENTICATION_BACKENDS = (
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+TEMPLATE_CONTEXT_PROCESSORS= (
+'django.core.context_processors.request'
+)

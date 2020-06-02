@@ -2,12 +2,12 @@
 {% load socialaccount %}
 {% providers_media_js %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Register</title>
+    <title>TheWeather</title>
     <meta name="description" content="Best weather app">
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
     <link rel="stylesheet"
@@ -17,12 +17,13 @@
     <link rel="stylesheet" href="{% static 'assets/fonts/material-icons.min.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="{% static 'assets/css/Login-Form-Dark.css' %}">
-</head></head>
+
+</head>
+
 <body>
 
 {% load crispy_forms_tags %}
 <div class="login-dark">
-<div class="login-dark2">
     <form method="post">
         {% csrf_token %}
         <h2 class="sr-only">Login Form</h2>
@@ -33,29 +34,33 @@
             <a class="btn btn-primary btn-block" href="{% provider_login_url "facebook" method="js_sdk" %}">Facebook</a>
         </div>
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">
-                Register</legend>
-         {{ form|crispy}}
-
+            <legend class="border-bottom mb-4"> {% if  name  %}
+                {{ name}}
+                {% else %}
+                    Login
+                {% endif %}</legend>
+            {{ data.form| crispy  }}
         </fieldset>
-        <div class="form-group">
-            <button class="btn btn-primary btn-block" type="submit">Log In</button>
 
-<small class="text-forgot">
-            Already have an account? <a class="ml-2" href={% url 'login' %}>Sign In</a>
-        </small>
-            </div>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit">
+                {% if  name  %}
+                {{ name}}
+                {% else %}
+                    Login
+                {% endif %}
+            </button>
+        </div>
+        <a class="forgot" href="#">Forgot your email or password?</a></form>
+
 </div>
 
 <script src="{% static 'assets/js/jquery.min.js' %}"></script>
 <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'assets/js/bs-init.js' %}"></script>
-{% if messages %}
-    {% for message in messages %}
-        <div clas="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
+<script>
+document.getElementById("p2").style.color = "blue";
+</script>
 </body>
+
 </html>

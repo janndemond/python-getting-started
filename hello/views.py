@@ -106,7 +106,7 @@ def mappingApi3(API, city, weather_data):
             mRain=weatherDetail(iMax=day['maxHumidity'], iMin=day['minHumidity'], iAvg=day['precipMM']),
             mWind=weatherDetail(iMax=day['windSpeedMaxKPH'], iMin=day['windSpeedMinKPH'], iAvg=day['pressureMB']),
             cName=day['weather'],
-            cIcon=static(day['icon']),
+            cIcon=static("weatherIcon/"+day['icon']),
             mAPI=API
         )
         # b.save()
