@@ -9,8 +9,7 @@ def create_profile(sender,instance, created,**kwargs ):
         profile.objects.create(user=instance)
 
 @receiver(post_init,sender=User)
-def create_profile(sender,instance, created,**kwargs ):
-    if created:
+def init_profile(sender,instance,**kwargs ):
         profile.objects.create(user=instance)
 @receiver(post_save,sender=User)
 def seva_profile(sender,instance,**kwargs):
