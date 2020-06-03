@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class City(models.Model):
     name = models.CharField(max_length=25)
@@ -40,5 +41,7 @@ class weatherDayForecast (models.Model):
 class email(models.Model):
     email = models.EmailField();
     city = models.CharField(max_length=25 ,default="Vaduz")
+
+
 
 ##########################

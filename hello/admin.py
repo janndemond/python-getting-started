@@ -7,3 +7,4 @@ from .models import City, weatherAPIForecast
 # Register your models here.
 admin.site.register(City)
 admin.site.register(weatherAPIForecast)
+

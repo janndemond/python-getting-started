@@ -1,23 +1,33 @@
-import datetime as dt
+
 import json
-import re
+
 import urllib
 from datetime import datetime
 import dateutil.parser
 
 import requests
-from django.shortcuts import render
-from django.shortcuts import render
+
+from django.shortcuts import render, redirect
 from django.templatetags.static import static
 
 from .forms import CityForm, email
 from .models import City, weatherAPIForecast, weatherDetail, weatherDayForecast
 from .unit_converter import parse_dms
+from users.sandGrid import sentEmail
+from django.contrib.auth.decorators import login_required
+
+from django.views.generic import ListView
+
+
+class weatherListView(ListView):
+    model = weatherDayForecast
 
 
 # Create your views here.
-
-
+@login_required()
+def email(request):
+    sentEmail()
+    return redirect('index')
 def index(request):
     #City.objects.all().delete()
     #cities = City.objects.all() #return all the cities in the database
