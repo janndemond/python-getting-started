@@ -1,0 +1,54 @@
+{% extends "hallo\index.html" %}
+{% block navigation %}
+    <nav class="navbar navbar-light navbar-expand fixed-top bg-light navigation-clean fixed">
+        <div class="container"><a class="navbar-brand" href="#">TheWeather</a>
+            <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                {% if user.is_authenticated %}
+                    <a class="btn btn-primary ml-auto" role="button" href="{% url 'profile' %}">{{ user.name }}</a>
+                    </div>
+                    <a class="btn btn-primary ml-auto" style="background-color: rgb(255,15,0);margin-left:10px;"
+                       role="button" href="{% url 'logout' %}">LogOut</a></div>
+                {% else %}
+                    <a class="btn btn-primary ml-auto " role="button" href="{% url 'login' %}">Register</a></div>
+                    <a class="btn btn-primary ml-auto" role="button"
+                       style="background-color: rgb(45,200,6);margin-left:10px; " href="{% url 'register' %}">Sign
+                        In</a></div>
+                {% endif %}
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 mx-auto">
+                <h1 class="mb-5"><em>Search for your city</em></h1>
+            </div>
+            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row">
+
+                        <div class="col-12 col-md-9 offset-xl-0 mb-2 mb-md-0"><input type="city"
+                                                                                     id="name"
+                                                                                     class="form-control form-control-lg"
+                                                                                     placeholder="Enter your city..."
+                                                                                     required
+                                                                                     content={{ form.name }}>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <button class="btn btn-primary btn-block btn-lg" type="submit">Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="overlay"></div>
+        <div class="overlay"></div>
+        <div class="overlay"></div>
+        <div class="overlay"></div>
+        <div class="overlay"></div>
+        <div class="overlay"></div>
+        <div class="overlay"></div>
+        <div class="overlay"></div>
+    </div>
+{% endblock navigation%}

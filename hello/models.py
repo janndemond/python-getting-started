@@ -37,5 +37,8 @@ class weatherDayForecast (models.Model):
     mWind=models.OneToOneField(weatherDetail, on_delete=models.CASCADE,related_name='windDetail')
     cName = models.CharField(max_length=25)
     cIcon = models.CharField(max_length=25)
+class email(models.Model):
+    email = models.EmailField();
+    city = models.CharField(max_length=25 ,default="Vaduz")
 
 ##########################

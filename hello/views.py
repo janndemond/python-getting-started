@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.shortcuts import render
 from django.templatetags.static import static
 
-from .forms import CityForm
+from .forms import CityForm, email
 from .models import City, weatherAPIForecast, weatherDetail, weatherDayForecast
 from .unit_converter import parse_dms
 
@@ -20,26 +20,36 @@ from .unit_converter import parse_dms
 
 def index(request):
     #City.objects.all().delete()
-    cities = City.objects.all() #return all the cities in the database
+    #cities = City.objects.all() #return all the cities in the database
+    cities=[]
     if request.method == 'POST': # only true if form is submitted
         form = CityForm(request.POST) # add actual request data to form for processing
         form.save() # will validate and save if validate
+        a = City()
+        a.name=form.cleaned_data.get('name')
+        cities.append(a)
+    else:
+        a = City()
+        a.name = "Vaduz"
+        cities.append(a)
     form = CityForm()
     weather_data =[]
+    dates=[]
     for API in weatherAPIForecast.objects.all():
         weather_data_API = []
         for city in cities:
             getGeoData(city)
             if API.cName=='openweathermap':
-                mappingApi1(API, city, weather_data_API)
+                mappingApi1(API, city, weather_data_API,dates)
             if API.cName=='here':
-                mappingApi2(API, city, weather_data_API)
+                mappingApi2(API, city, weather_data_API,dates)
             if API.cName == 'aerisweather':
-                mappingApi3(API, city, weather_data_API)
+                mappingApi3(API, city, weather_data_API,dates)
 
             weather_data.append(weather_data_API)
-    context = {'weather_data' : weather_data,'city':cities[0] ,'form' : form}
-    return render(request, 'weather_api1_nextdays/index.html', context) #returns the index.html template
+    dates = list(sorted(dict.fromkeys(dates)))
+    context = {'weather_data' : weather_data,'city':cities[0] ,'dates':dates, 'form' : form}
+    return render(request, 'hallo/navigation.html', context) #returns the index.html template
 def getGeoData(city):
     url_geodata = 'https://api.opencagedata.com/geocode/v1/json?q={}&key=1e73e20428e54172a2795c05a59cafab'
     if not city.cLatitude or city.cLongitude or city.cCountry:
@@ -52,14 +62,15 @@ def getGeoData(city):
         city.cLongitude = lng_param
         city.cCountry = city_countrycode
         city.save()
-def mappingApi1(API, city, weather_data):
+def mappingApi1(API, city, weather_data,dates):
     payload = {'lat': city.cLatitude, 'lon': city.cLongitude, 'appid': API.cKey, 'units': 'metric', 'exclude': 'hourly'}
     city_weather = requests.get(API.cAdress, payload).json()
     forcast = city_weather['daily']
     for day in forcast:
-        yourdate = datetime.utcfromtimestamp(day['dt'])
+        yourdate = datetime.utcfromtimestamp(day['dt']).strftime("%d %B, %Y")
+        dates.append(yourdate)
         b = weatherDayForecast(
-            dForecasteDate=yourdate.strftime("%d %B, %Y"),
+            dForecasteDate=yourdate,
             dCallDate=datetime.now(),
             mTemp=weatherDetail(iMax=day['temp']['max'], iMin=day['temp']['min'], iAvg=day['temp']['day']),
             mRain=weatherDetail(iMax=day['humidity'], iMin=day['pressure'], iAvg=day['clouds']),
@@ -70,14 +81,15 @@ def mappingApi1(API, city, weather_data):
         )
         # b.save()
         weather_data.append(b)
-def mappingApi2(API, city, weather_data):
+def mappingApi2(API, city, weather_data,dates):
     payload = {'latitude': city.cLatitude, 'longitude': city.cLongitude, 'apiKey': API.cKey, 'metric': 'true', 'product': 'forecast_7days_simple'}
     city_weather = requests.get(API.cAdress, payload).json()
     forcast = city_weather['dailyForecasts']['forecastLocation']['forecast']
     for day in forcast:
-        yourdate = dateutil.parser.parse(day['utcTime'])
+        yourdate = dateutil.parser.parse(day['utcTime']).strftime("%d %B, %Y")
+        dates.append(yourdate)
         b = weatherDayForecast(
-            dForecasteDate=yourdate.strftime("%d %B, %Y"),
+            dForecasteDate=yourdate,
             dCallDate=datetime.now(),
             mTemp=weatherDetail(iMax=day['highTemperature'], iMin=day['lowTemperature'], iAvg=day['comfort']),
             mRain=weatherDetail(iMax=day['humidity'], iMin=day['precipitationProbability'], iAvg=day['rainFall']),
@@ -89,7 +101,7 @@ def mappingApi2(API, city, weather_data):
         # b.save()
         weather_data.append(b)
 
-def mappingApi3(API, city, weather_data):
+def mappingApi3(API, city, weather_data,dates):
 
     request = urllib.request.urlopen(
         'https://api.aerisapi.com/forecasts/'+str(city.cLatitude)+','+str(city.cLatitude)+'?&format=json&filter=day&limit=7&client_id=9DimSV5sbyOTa5GsX0Fh4&client_secret='+API.cKey)
@@ -98,9 +110,10 @@ def mappingApi3(API, city, weather_data):
     #city_weather = response.json()
     forcast = test['response'][0]['periods']
     for day in forcast:
-        yourdate = dateutil.parser.parse(day['dateTimeISO'])
+        yourdate = dateutil.parser.parse(day['dateTimeISO']).strftime("%d %B, %Y")
+        dates.append(yourdate)
         b = weatherDayForecast(
-            dForecasteDate=yourdate.strftime("%d %B, %Y"),
+            dForecasteDate=yourdate,
             dCallDate=datetime.now(),
             mTemp=weatherDetail(iMax=day['maxTempC'], iMin=day['minTempC'], iAvg=day['avgTempC']),
             mRain=weatherDetail(iMax=day['maxHumidity'], iMin=day['minHumidity'], iAvg=day['precipMM']),

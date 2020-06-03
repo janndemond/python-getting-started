@@ -1,0 +1,190 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+        <title>Home - The Weather</title>
+        <meta name="description" content="Best weather app">
+        <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic">
+        <link rel="stylesheet" href="{% static 'assets/fonts/font-awesome.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/fonts/ionicons.min.css' %}">
+        <link rel="stylesheet" href="{% static 'assets/fonts/material-icons.min.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+        <link rel="stylesheet" href="{% static 'assets/css/Login-Form-Dark.css' %}">
+    </head>
+</head>
+
+<body>
+{% block navigation %}
+
+
+{% endblock navigation%}
+
+
+<section class="features-icons bg-light text-center">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2">
+            <h3>Dates <br/></h3>
+                <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-2">
+                    {% for date in dates %}
+
+                        <div class="box">
+
+                            <div class="media content-section text-left">
+                                <div class="content">
+                                    <p>
+                                    <h5>{{ date }}</h5>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    {% endfor %}
+                </div>
+
+            </div>
+            {% for API in weather_data %}
+                <div class="col-lg-3">
+                    <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-2">
+                        {% for k0 in API %}
+                            {% if forloop.first %}
+                                <h3>{{ k0.mAPI.cName }} <br/></h3>
+                            {% endif %}
+                            <div class="box">
+                                <article class="media content-section">
+                                    <div class="media-left">
+                                        <figure class="image is-50x50">
+                                            <img src="{{ k0.cIcon }}" alt="Image">
+                                        </figure>
+                                    </div>
+                                    <div class="media-content text-left">
+                                        <div class="content">
+                                            <p>
+                                            <h5>{{ k0.dForecasteDate }}</h5>
+                                            <strong>{{ k0.mTemp.iAvg }}° C</strong>
+                                            <br> {{ k0.cName }}
+                                            <br> Pressure: {{ k0.mRain.iMin }} hPa
+                                            <br> Humidity: {{ k0.mRain.iMax }}%
+                                            </p>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+</section>
+<section class="showcase"></section>
+<section class="testimonials text-center bg-light">
+    <div class="container">
+        <h2 class="mb-5">The Creators</h2>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="mx-auto testimonial-item mb-5 mb-lg-0"><img class="rounded-circle img-fluid mb-3"
+                                                                        src="{% static 'img/Gramoz_Sejfijaj.jpg' %}">
+                    <h5>Gramoz Sejfijaj</h5>
+                    <p class="font-weight-light mb-0">"Make it simple and useful!"</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mx-auto testimonial-item mb-5 mb-lg-0"><img class="rounded-circle img-fluid mb-3"
+                                                                        src="{% static 'img/Jann_Demond.jpg' %}">
+                    <h5>Jann Demond</h5>
+                    <p class="font-weight-light mb-0">Never give up :)</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="mx-auto testimonial-item mb-5 mb-lg-0"><img class="rounded-circle img-fluid mb-3"
+                                                                        src="{% static 'img/Mathias_Schaefer.png' %}">
+                    <h5>Mathias Schäfer</h5>
+                    <p class="font-weight-light mb-0">...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="call-to-action text-white text-center"
+         style="background:url(&quot;{% static 'assets/img/bg-masthead.jpg' %}&quot;) no-repeat center center;background-size:cover;">
+    <div class="overlay"></div>
+    <div class="overlay"></div>
+    <div class="overlay"></div>
+    <div class="overlay"></div>
+    <div class="overlay"></div>
+    <div class="overlay"></div>
+    <div class="overlay"></div>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 mx-auto">
+                <h2 class="mb-4">Weather alerts !</h2>
+            </div>
+            <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+                <form method="post">
+                    <div class="form-row">
+                        <div class="col-12 col-md-9 mb-2 mb-md-0"><input class="form-control form-control-lg"
+                                                                         type="email" placeholder="Enter your email..."
+                                                                         required
+                                                                         content={{ form.email }}>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <button class="btn btn-primary btn-block btn-lg" type="submit">Sign up!</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 my-auto h-100 text-center text-lg-left">
+                <ul class="list-inline mb-2">
+                    <li class="list-inline-item"><a href="#">About</a></li>
+                    <li class="list-inline-item"><span>⋅</span></li>
+                    <li class="list-inline-item"><a href="#">Contact</a></li>
+                    <li class="list-inline-item"><span>⋅</span></li>
+                    <li class="list-inline-item"><a href="#">Terms of &nbsp;Use</a></li>
+                    <li class="list-inline-item"><span>⋅</span></li>
+                    <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+                </ul>
+                <p class="text-muted small mb-4 mb-lg-0">© TheWeather 2020. All Rights Reserved.</p>
+            </div>
+            <div class="col-lg-6 my-auto h-100 text-center text-lg-right">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item"><a href="#"><i class="fa fa-facebook fa-2x fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fa fa-twitter fa-2x fa-fw"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fa fa-instagram fa-2x fa-fw"></i></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/bs-init.js' %}"></script>
+</body>
+
+</html>
