@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
-from hello.views import weatherListView
+
 admin.autodiscover()
 
 import hello.views
@@ -20,6 +20,7 @@ from   users import views as user_views
 
 urlpatterns = [
     path("", hello.views.index, name="index"),
+    path("evaluation/", hello.views.indexDetails, name="evaluation"),
     #path("", weatherListView.as_view(), name="index"),
     path("register/",user_views.register,name="register"),
     path("sentEmail/",hello.views.email,name="SentEmail"),

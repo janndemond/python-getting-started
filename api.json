@@ -1,0 +1,58 @@
+78.92888888888889
+[
+  {
+    "model": "hello.weatherapiforecast",
+    "pk": 1,
+    "fields": {
+      "cName": "aerisweather",
+      "cAdress": "https://api.aerisapi.com/forecasts/",
+      "cKey": "xQDztBqXxf2yE3clZk3Znn2ftExfgzTTvhtP9Uby",
+      "iCallsPerDay": 0,
+      "iMaxCallsPerday": 500
+    }
+  },
+  {
+    "model": "hello.weatherapiforecast",
+    "pk": 2,
+    "fields": {
+      "cName": "here.com",
+      "cAdress": "https://weather.ls.hereapi.com/weather/1.0/report.json?apiKey={}&product=forecast_7days_simple&latit",
+      "cKey": "VCeAX-isAP-r2K2JzUfkgMe63dSEAbS-KIO1WUjL0FI",
+      "iCallsPerDay": 0,
+      "iMaxCallsPerday": 500
+    }
+  },
+  {
+    "model": "hello.weatherapiforecast",
+    "pk": 3,
+    "fields": {
+      "cName": "OpenWeatherMap",
+      "cAdress": "https://api.openweathermap.org/data/2.5/onecall",
+      "cKey": "f3d77950bc7cc4a4899f21e0e491ecd3",
+      "iCallsPerDay": 0,
+      "iMaxCallsPerday": 500
+    }
+  },
+  {
+    "model": "hello.weatherapiforecast",
+    "pk": 4,
+    "fields": {
+      "cName": "WorldWeatherOnline",
+      "cAdress": "'http://api.worldweatheronline.com/premium/v1/weather.ashx?key={}&q={},{}&num_of_days=5&tp=24&format",
+      "cKey": "220c64fed4a44bed8d293252201705",
+      "iCallsPerDay": 0,
+      "iMaxCallsPerday": 500
+    }
+  },
+  {
+    "model": "hello.weatherapiforecast",
+    "pk": 5,
+    "fields": {
+      "cName": "Weatherbit",
+      "cAdress": "'https://api.weatherbit.io/v2.0/forecast/daily?key={}&lat={}&lon={}&units=M&days=7'",
+      "cKey": "eb37c9d0e8204376a376ae29539d8fec",
+      "iCallsPerDay": 0,
+      "iMaxCallsPerday": 500
+    }
+  }
+]

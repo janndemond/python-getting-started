@@ -1,6 +1,6 @@
 from django.forms import ModelForm, TextInput
-from .models import City, email
-
+from .models import City
+from .models import email
 class CityForm(ModelForm):
     class Meta:
         model = City

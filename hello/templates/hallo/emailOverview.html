@@ -1,0 +1,68 @@
+    <section class="features-icons bg-light text-center">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2">
+            <h3>Dates <br/></h3>
+                <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-2">
+                    {% for date in dates %}
+
+                        <div class="box">
+
+                            <div class="media content-section text-left">
+                                <div class="content">
+                                    <p>
+                                    <h5>{{ date }}</h5>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    {% endfor %}
+                </div>
+
+            </div>
+            {% for API in weather_data %}
+                <div class="col-lg-3">
+                    <div class="mx-auto features-icons-item mb-5 mb-lg-0 mb-lg-2">
+                        {% for k0 in API %}
+                            {% if forloop.first %}
+                                <h3>{{ k0.mAPI.cName }} <br/></h3>
+                            {% endif %}
+                            <div class="box">
+                                <article class="media content-section">
+                                    <div class="media-left">
+                                        <figure class="image is-50x50">
+                                            <img src="{{ k0.cIcon }}" alt="Image">
+                                        </figure>
+                                    </div>
+                                    <div class="media-content text-left">
+                                        <div class="content">
+                                            <p>
+                                            <h5>{{ k0.dForecasteDate }}</h5>
+                                            <strong>{{ k0.mTemp.iAvg }}° C</strong>
+                                            <br> {{ k0.cName }}
+                                            <br> Pressure: {{ k0.mRain.iMin }} hPa
+                                            <br> Humidity: {{ k0.mRain.iMax }}%
+                                            </p>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+</section>

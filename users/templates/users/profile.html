@@ -1,7 +1,8 @@
 
-{% extends "hallo/index.html" %}
+{% extends "hallo/navigation.html" %}
 {% load crispy_forms_tags %}
-{% block navigation %}
+{% block contend %}
+   <section class="features-icons bg-light text-center">
     <div class="content-section">
       <div class="media">
         <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
@@ -22,4 +23,5 @@
           </div>
       </form>
     </div>
+   </section>
 {% endblock  %}

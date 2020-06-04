@@ -1,4 +1,3 @@
-
 import json
 
 import urllib
@@ -8,11 +7,15 @@ import dateutil.parser
 import requests
 
 from django.shortcuts import render, redirect
+from django.template.loader import get_template
 from django.templatetags.static import static
 
 from .forms import CityForm, email
-from .models import City, weatherAPIForecast, weatherDetail, weatherDayForecast
-from .unit_converter import parse_dms
+from .models import City, weatherAPIForecast, weatherDetail, weatherDayForecast, Forecast_1_OWM, Forecast_1_Weatherbit, \
+    Forecast_1_WWO
+from .processing3 import current_weather_processing
+from .processing4 import evaluation
+from .unit_converter import parse_dms, getGeoData
 from users.sandGrid import sentEmail
 from django.contrib.auth.decorators import login_required
 
@@ -26,55 +29,65 @@ class weatherListView(ListView):
 # Create your views here.
 @login_required()
 def email(request):
-    sentEmail()
+    a = evaluation(request,"Vaduz")
+    htmlcontend = get_template('hallo/detailEmail.html').render(a)
+    sentEmail(htmlcontend)
     return redirect('index')
 def index(request):
     #City.objects.all().delete()
     #cities = City.objects.all() #return all the cities in the database
     cities=[]
-    if request.method == 'POST': # only true if form is submitted
-        form = CityForm(request.POST) # add actual request data to form for processing
-        form.save() # will validate and save if validate
-        a = City()
-        a.name=form.cleaned_data.get('name')
-        cities.append(a)
-    else:
-        a = City()
-        a.name = "Vaduz"
-        cities.append(a)
-    form = CityForm()
+    form = checkForm(cities, request)
     weather_data =[]
     dates=[]
     for API in weatherAPIForecast.objects.all():
         weather_data_API = []
         for city in cities:
             getGeoData(city)
-            if API.cName=='openweathermap':
+            if API.cName=='OpenWeatherMap':
                 mappingApi1(API, city, weather_data_API,dates)
-            if API.cName=='here':
+            if API.cName=='here.com':
                 mappingApi2(API, city, weather_data_API,dates)
             if API.cName == 'aerisweather':
-                mappingApi3(API, city, weather_data_API,dates)
+                #mappingApi3(API, city, weather_data_API,dates)
+                break
 
             weather_data.append(weather_data_API)
     dates = list(sorted(dict.fromkeys(dates)))
     context = {'weather_data' : weather_data,'city':cities[0] ,'dates':dates, 'form' : form}
-    return render(request, 'hallo/navigation.html', context) #returns the index.html template
-def getGeoData(city):
-    url_geodata = 'https://api.opencagedata.com/geocode/v1/json?q={}&key=1e73e20428e54172a2795c05a59cafab'
-    if not city.cLatitude or city.cLongitude or city.cCountry:
-        city_geodata = requests.get(
-            url_geodata.format(city)).json()  # request the API data and convert the JSON to Python data types
-        city_countrycode = city_geodata["results"][0]["components"]["ISO_3166-1_alpha-3"]
-        lat_param = parse_dms(city_geodata["results"][0]["annotations"]["DMS"]["lat"])
-        lng_param = parse_dms(city_geodata["results"][0]["annotations"]["DMS"]["lng"])
-        city.cLatitude = lat_param
-        city.cLongitude = lng_param
-        city.cCountry = city_countrycode
-        city.save()
+    return render(request, 'hallo/overview.html', context) #returns the index.html template
+
+
+def checkForm(cities, request):
+    if request.method == 'POST':  # only true if form is submitted
+        form = CityForm(request.POST)  # add actual request data to form for processing
+        form.save()  # will validate and save if validate
+        a = City()
+        a.name = form.cleaned_data.get('name')
+        cities.append(a)
+    else:
+        a = City()
+        a.name = "Vaduz"
+        cities.append(a)
+    form = CityForm()
+    return form
+
+
+def indexDetails(request):
+    """Shows the index page of the forecast_evaluation app."""
+    cities = []
+    #Forecast_1_OWM.objects.all().delete()
+    #Forecast_1_Weatherbit.objects.all().delete()
+    #Forecast_1_WWO.objects.all().delete()
+
+    form = checkForm(cities, request)
+    context = current_weather_processing(request)
+    a = evaluation(request,"Vaduz")
+    return render(request, 'hallo/detail.html', a)
+
 def mappingApi1(API, city, weather_data,dates):
-    payload = {'lat': city.cLatitude, 'lon': city.cLongitude, 'appid': API.cKey, 'units': 'metric', 'exclude': 'hourly'}
-    city_weather = requests.get(API.cAdress, payload).json()
+
+    city_weather = requests.get(API.cAdress.format(API.cKey,city.cLatitude,city.cLongitude)).json()
     forcast = city_weather['daily']
     for day in forcast:
         yourdate = datetime.utcfromtimestamp(day['dt']).strftime("%d %B, %Y")
@@ -92,8 +105,8 @@ def mappingApi1(API, city, weather_data,dates):
         # b.save()
         weather_data.append(b)
 def mappingApi2(API, city, weather_data,dates):
-    payload = {'latitude': city.cLatitude, 'longitude': city.cLongitude, 'apiKey': API.cKey, 'metric': 'true', 'product': 'forecast_7days_simple'}
-    city_weather = requests.get(API.cAdress, payload).json()
+
+    city_weather = requests.get(API.cAdress.format(API.cKey,city.cLatitude,city.cLongitude)).json()
     forcast = city_weather['dailyForecasts']['forecastLocation']['forecast']
     for day in forcast:
         yourdate = dateutil.parser.parse(day['utcTime']).strftime("%d %B, %Y")
