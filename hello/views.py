@@ -50,7 +50,7 @@ def index(request):
                 mappingApi2(API, city, weather_data_API,dates)
             if API.cName == 'aerisweather':
                 #mappingApi3(API, city, weather_data_API,dates)
-                break
+                continue
 
             weather_data.append(weather_data_API)
     dates = list(sorted(dict.fromkeys(dates)))
